@@ -13,4 +13,4 @@ export class User {
   role: string;
 }
 
-export const UserShcema = SchemaFactory.createForClass(User);
+export const UserSchema = SchemaFactory.createForClass(User);
