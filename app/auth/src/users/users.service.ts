@@ -4,7 +4,6 @@ import { User, UserDocument } from './schemas/user.schema';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
-import { access } from 'fs';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
