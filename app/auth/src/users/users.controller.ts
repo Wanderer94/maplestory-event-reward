@@ -11,6 +11,8 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RolesGuard } from './guards/roles.guard';
+import { Roles } from './decorators/roles.decorator';
 
 @Controller('auth')
 export class UsersController {
@@ -34,5 +36,14 @@ export class UsersController {
   @Get('me')
   getMe(@Request() req) {
     return { message: '내 정보입니다', user: req.user };
+  }
+}
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Controller('admin')
+export class AdminController {
+  @Roles('ADMIN')
+  @Get('dashboard')
+  getDashboard(@Request() req) {
+    return { message: '관리자만 볼 수 있는 대시보드입니다.', user: req.user };
   }
 }
