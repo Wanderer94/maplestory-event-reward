@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { Model } from 'mongoose';
@@ -7,18 +7,12 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
-export class UsersService implements OnModuleInit {
+export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private readonly jwtService: JwtService,
   ) {}
-  onModuleInit() {
-    console.log('🔁 [onModuleInit] jwtService:', this.jwtService);
-    console.log(
-      '🔁 [onModuleInit] jwtService.options:',
-      (this.jwtService as any).options,
-    );
-  }
+
   async createUser(dto: CreateUserDto): Promise<User> {
     const { email, password } = dto;
     const existing = await this.userModel.findOne({ email });
