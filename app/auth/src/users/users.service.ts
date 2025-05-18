@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { Model } from 'mongoose';
@@ -7,12 +7,18 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
-export class UsersService {
+export class UsersService implements OnModuleInit {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private readonly jwtService: JwtService,
   ) {}
-
+  onModuleInit() {
+    console.log('🔁 [onModuleInit] jwtService:', this.jwtService);
+    console.log(
+      '🔁 [onModuleInit] jwtService.options:',
+      (this.jwtService as any).options,
+    );
+  }
   async createUser(dto: CreateUserDto): Promise<User> {
     const { email, password } = dto;
     const existing = await this.userModel.findOne({ email });
@@ -39,12 +45,29 @@ export class UsersService {
     if (!isMatch) {
       throw new Error('비밀번호가 틀렸습니다');
     }
-
     return user;
   }
 
   async login(user: UserDocument): Promise<{ access_token: string }> {
     const payload = { sub: user._id, email: user.email, role: user.role };
-    return { access_token: this.jwtService.sign(payload) };
+    console.log('🧪 [1] Signing payload:', payload);
+    console.log('🧪 [2] jwtService:', this.jwtService);
+    console.log('🧪 [3] jwtService.options:', (this.jwtService as any).options);
+    console.log('🧪 [4] typeof jwtService.sign:', typeof this.jwtService.sign);
+    console.log('🧪 [5] jwtService.sign exists:', !!this.jwtService.sign);
+    console.log('🧪 [6] JWT_SECRET from env:', process.env.JWT_SECRET);
+    console.log(
+      '🧪 [7] jwtService properties:',
+      Object.getOwnPropertyNames(this.jwtService),
+    );
+    try {
+      const token = this.jwtService.sign(payload);
+      console.log('✅ [8] Token successfully generated:', token);
+      return { access_token: token };
+    } catch (e) {
+      console.error('❌ [9] JWT Signing Error:', e);
+      throw e;
+    }
+    // return { access_token: this.jwtService.sign(payload) };
   }
 }

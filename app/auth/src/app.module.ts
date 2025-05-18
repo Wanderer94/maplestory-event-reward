@@ -5,18 +5,15 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TestService } from './test/test.service';
 import { UsersModule } from './users/users.module';
 import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://mongo:27017/auth'),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'dev_secret',
-      signOptions: { expiresIn: '1h' },
-    }),
+    ConfigModule.forRoot({ isGlobal: true }),
     UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService, TestService],
-  exports: [JwtModule],
 })
 export class AppModule {}
