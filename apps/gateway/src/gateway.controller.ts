@@ -1,12 +1,13 @@
-import { Controller, Get } from '@nestjs/common';
-import { GatewayService } from './gateway.service';
+import { Controller, Get, Req } from '@nestjs/common';
+import { Request } from 'express';
+import { Roles } from '@app/common/decorators/roles.decorator';
+import { UserRole } from '@app/common/dto/user-role.enum';
 
-@Controller()
+@Controller('gateway')
 export class GatewayController {
-  constructor(private readonly gatewayService: GatewayService) {}
-
-  @Get()
-  getHello(): string {
-    return this.gatewayService.getHello();
+  @Get('me')
+  @Roles(UserRole.USER, UserRole.OPERATOR, UserRole.ADMIN)
+  getProfile(@Req() req: Request) {
+    return req.user;
   }
 }
