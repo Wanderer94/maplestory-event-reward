@@ -1,38 +1,41 @@
-version: "3.8"
+version: '3.8'
 
 services:
   mongo:
-    image: mongo:6
+    image: mongo
     container_name: mongo
     ports:
-      - "27017:27017"
+      - '27017:27017'
     volumes:
       - mongo-data:/data/db
 
-  auth:
-    build: ./app/auth
-    container_name: auth
+  gateway:
+    build:
+      context: .
+      dockerfile: apps/gateway/Dockerfile
     ports:
-      - "3001:3001"
+      - '3000:3000'
+    depends_on:
+      - auth
+      - event
+
+  auth:
+    build:
+      context: .
+      dockerfile: apps/auth/Dockerfile
+    ports:
+      - '3002:3002'
     depends_on:
       - mongo
 
   event:
-    build: ./app/event
-    container_name: event
+    build:
+      context: .
+      dockerfile: apps/event/Dockerfile
     ports:
-      - "3002:300"
+      - '3001:3001'
     depends_on:
       - mongo
-
-  gateway:
-    build: ./app/gateway
-    container_name: gateway
-    ports:
-      - "3000:3000"
-    depends_on:
-      - auth
-      - event
 
 volumes:
   mongo-data:
