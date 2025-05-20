@@ -15,7 +15,7 @@ import { RolesGuard } from '@app/common/guards/roles.guard';
 import { CreateEventDto } from '../../../libs/common/src/dto/create-event.dto';
 import { CreateRewardDto } from '../../../libs/common/src/dto/create-reward.dto';
 
-@Controller('events')
+@Controller('event')
 @UseGuards(RolesGuard)
 export class EventController {
   constructor(private readonly eventService: EventService) {}
