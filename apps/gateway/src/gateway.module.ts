@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { GatewayAuthController } from './auth.controller';
-import { GatewayEventController } from './event.controller';
+import { GatewayAuthController } from './gateway-auth.controller';
+import { GatewayEventController } from './gateway-event.controller';
 import { HttpModule } from '@nestjs/axios';
 import { JwtStrategy } from '../../../libs/common/src/strategies/jwt.strategy';
 import { APP_GUARD } from '@nestjs/core';
