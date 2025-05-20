@@ -9,11 +9,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { EventService } from './event.service';
-import { CreateEventDto } from './dto/create-event.dto';
-import { CreateRewardDto } from './dto/create-reward.dto';
 import { Roles } from '@app/common/decorators/roles.decorator';
 import { UserRole } from '@app/common/dto/user-role.enum';
 import { RolesGuard } from '@app/common/guards/roles.guard';
+import { CreateEventDto } from '../../../libs/common/src/dto/create-event.dto';
+import { CreateRewardDto } from '../../../libs/common/src/dto/create-reward.dto';
 
 @Controller('events')
 @UseGuards(RolesGuard)

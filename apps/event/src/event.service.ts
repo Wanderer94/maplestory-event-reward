@@ -8,8 +8,8 @@ import { Model } from 'mongoose';
 import { Event } from './schemas/event.schema';
 import { Reward } from './schemas/reward.schema';
 import { RewardRequest } from './schemas/reward-request.schema';
-import { CreateEventDto } from './dto/create-event.dto';
-import { CreateRewardDto } from './dto/create-reward.dto';
+import { CreateEventDto } from '../../../libs/common/src/dto/create-event.dto';
+import { CreateRewardDto } from '../../../libs/common/src/dto/create-reward.dto';
 
 @Injectable()
 export class EventService {

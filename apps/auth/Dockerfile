@@ -7,7 +7,6 @@ RUN npm install
 
 COPY . .
 
-WORKDIR /app/apps/auth
 RUN npm run build
 
-CMD ["node", "dist/main"]
+CMD ["node", "dist/apps/auth/src/main"]

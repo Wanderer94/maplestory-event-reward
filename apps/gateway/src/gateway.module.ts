@@ -1,20 +1,25 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
+import { GatewayAuthController } from './auth.controller';
+import { GatewayEventController } from './event.controller';
+import { HttpModule } from '@nestjs/axios';
+import { JwtStrategy } from '../../../libs/common/src/strategies/jwt.strategy';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from '@app/common/guards/roles.guard';
-import { GatewayController } from './gateway.controller';
+import { JwtAuthGuard } from '../../../libs/common/src/guards/jwt-auth.guard';
+import { RolesGuard } from '../../../libs/common/src/guards/roles.guard';
 
 @Module({
-  imports: [
-    JwtModule.register({
-      secret: 'secret',
-    }),
-  ],
-  controllers: [GatewayController],
+  imports: [HttpModule],
+  controllers: [GatewayAuthController, GatewayEventController],
   providers: [
-    { provide: APP_GUARD, useClass: AuthGuard('jwt') },
-    { provide: APP_GUARD, useClass: RolesGuard },
+    JwtStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
   ],
 })
 export class GatewayModule {}
